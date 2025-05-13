@@ -1,5 +1,6 @@
 import process from 'node:process'
 import { createInterface, type Interface } from 'node:readline';
+import { getCommands } from './repl.js';
 
 
 export type CLICommand = {
@@ -21,7 +22,10 @@ export function initState(): State {
 });
 
     const commands: Record<string, CLICommand> = {};
-    
-return {readline, commands};
+
+return {
+    readline: readline,
+    commands: getCommands()
+};
 
 }

@@ -2,18 +2,20 @@ import { commandExit } from './command_exit.js';
 import { commandHelp } from './command_help.js';
 import { cleanInput } from './clean_input.js';
 export function startREPL(state) {
-    state.commands = getCommands();
     state.readline.prompt();
     state.readline.on("line", (input) => {
-        if (input === "") {
+        let cleanedInput = cleanInput(input);
+        if (cleanedInput.length === 0) {
             state.readline.prompt();
         }
-        let cleanedInput = cleanInput(input);
-        switch (cleanedInput[0]) {
-            case "exit": commandExit();
-            case "help": commandHelp(state);
-            default: console.log("invalid command");
+        const cmdName = cleanedInput[0];
+        const cmd = state.commands[cmdName];
+        if (!cmd) {
+            console.log(`Unknown command: "${cmdName}". Type "help" to get a list of commands.`);
+            state.readline.prompt();
+            return;
         }
+        cmd.callback(state);
         state.readline.prompt();
     });
 }
