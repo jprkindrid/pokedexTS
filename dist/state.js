@@ -1,15 +1,17 @@
-import process from 'node:process';
-import { createInterface } from 'node:readline';
-import { getCommands } from './repl.js';
+import { createInterface } from "readline";
+import { getCommands } from "./repl.js";
+import { PokeAPI } from "./pokeapi.js";
 export function initState() {
-    const readline = createInterface({
+    const rl = createInterface({
         input: process.stdin,
         output: process.stdout,
-        prompt: 'Pokedex > '
+        prompt: "pokedex > ",
     });
-    const commands = {};
     return {
-        readline: readline,
-        commands: getCommands()
+        readline: rl,
+        commands: getCommands(),
+        pokeAPI: new PokeAPI(),
+        nextLocationsURL: "",
+        prevLocationsURL: "",
     };
 }

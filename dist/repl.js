@@ -1,9 +1,10 @@
 import { commandExit } from './command_exit.js';
 import { commandHelp } from './command_help.js';
 import { cleanInput } from './clean_input.js';
-export function startREPL(state) {
+import { commandMapBack, commandMapForward } from './command_map.js';
+export async function startREPL(state) {
     state.readline.prompt();
-    state.readline.on("line", (input) => {
+    state.readline.on("line", async (input) => {
         let cleanedInput = cleanInput(input);
         if (cleanedInput.length === 0) {
             state.readline.prompt();
@@ -15,7 +16,12 @@ export function startREPL(state) {
             state.readline.prompt();
             return;
         }
-        cmd.callback(state);
+        try {
+            await cmd.callback(state);
+        }
+        catch (err) {
+            console.log(err.message);
+        }
         state.readline.prompt();
     });
 }
@@ -28,8 +34,18 @@ export function getCommands() {
         },
         exit: {
             name: "exit",
-            description: "Exits the Pokedex",
+            description: "Exit the Pokedex",
             callback: commandExit,
+        },
+        map: {
+            name: "map",
+            description: "Get the next page of locations",
+            callback: commandMapForward,
+        },
+        mapb: {
+            name: "mapb",
+            description: "Get the previous page of locations",
+            callback: commandMapBack,
         },
     };
 }

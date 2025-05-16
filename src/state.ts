@@ -1,31 +1,33 @@
-import process from 'node:process'
-import { createInterface, type Interface } from 'node:readline';
-import { getCommands } from './repl.js';
-
+import { createInterface, type Interface } from "readline";
+import { getCommands } from "./repl.js";
+import { PokeAPI } from "./pokeapi.js";
 
 export type CLICommand = {
-    name: string;
-    description: string;
-    callback: (state: State) => void;
-}
-
-export type State = {
-    readline: Interface;
-    commands: Record<string, CLICommand>;
-}
-
-export function initState(): State {
-    const readline = createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt: 'Pokedex > '
-});
-
-    const commands: Record<string, CLICommand> = {};
-
-return {
-    readline: readline,
-    commands: getCommands()
+  name: string;
+  description: string;
+  callback: (state: State) => Promise<void>;
 };
 
+export type State = {
+  readline: Interface;
+  commands: Record<string, CLICommand>;
+  pokeAPI: PokeAPI;
+  nextLocationsURL: string;
+  prevLocationsURL: string;
+};
+
+export function initState() {
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    prompt: "pokedex > ",
+  });
+
+  return {
+    readline: rl,
+    commands: getCommands(),
+    pokeAPI: new PokeAPI(),
+    nextLocationsURL: "",
+    prevLocationsURL: "",
+  };
 }
