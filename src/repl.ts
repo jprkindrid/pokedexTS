@@ -3,7 +3,7 @@ import { commandHelp } from  './command_help.js'
 import { cleanInput } from './clean_input.js';
 import { State, type CLICommand} from './state.js'
 import { commandMapBack, commandMapForward } from './command_map.js';
-
+import { commandExplore } from './command_explore.js'
 
 export async function startREPL(state: State) {
     state.readline.prompt();
@@ -13,7 +13,9 @@ export async function startREPL(state: State) {
         if (cleanedInput.length === 0) {
             state.readline.prompt();
         }
+
         const cmdName = cleanedInput[0]
+        const cmdArgs: string[] = cleanedInput.length > 1 ? [...cleanedInput.slice(1)] : [];
         const cmd = state.commands[cmdName]
 
         if (!cmd) {
@@ -24,7 +26,7 @@ export async function startREPL(state: State) {
         return;
         }
         try {
-          await cmd.callback(state);
+          await cmd.callback(state, ...cmdArgs);
         } catch (err) {
           console.log((err as Error).message)
         }
@@ -55,6 +57,11 @@ export function getCommands(): Record<string, CLICommand> {
       name: "mapb",
       description: "Get the previous page of locations",
       callback: commandMapBack,
+    },
+    explore: {
+      name: "explore <location_name>",
+      description: "see nearby pokemon at a location",
+      callback: commandExplore,
     },
   };
 }

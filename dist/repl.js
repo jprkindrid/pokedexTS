@@ -2,6 +2,7 @@ import { commandExit } from './command_exit.js';
 import { commandHelp } from './command_help.js';
 import { cleanInput } from './clean_input.js';
 import { commandMapBack, commandMapForward } from './command_map.js';
+import { commandExplore } from './command_explore.js';
 export async function startREPL(state) {
     state.readline.prompt();
     state.readline.on("line", async (input) => {
@@ -10,14 +11,16 @@ export async function startREPL(state) {
             state.readline.prompt();
         }
         const cmdName = cleanedInput[0];
+        const cmdArgs = cleanedInput.length > 1 ? [...cleanedInput.slice(1)] : [];
         const cmd = state.commands[cmdName];
+        console.log(cmdArgs);
         if (!cmd) {
             console.log(`Unknown command: "${cmdName}". Type "help" to get a list of commands.`);
             state.readline.prompt();
             return;
         }
         try {
-            await cmd.callback(state);
+            await cmd.callback(state, ...cmdArgs);
         }
         catch (err) {
             console.log(err.message);
@@ -46,6 +49,11 @@ export function getCommands() {
             name: "mapb",
             description: "Get the previous page of locations",
             callback: commandMapBack,
+        },
+        explore: {
+            name: "explore",
+            description: "explore a location by name or id",
+            callback: commandExplore,
         },
     };
 }
