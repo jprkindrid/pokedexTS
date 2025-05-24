@@ -4,6 +4,7 @@ import { cleanInput } from './clean_input.js';
 import { State, type CLICommand} from './state.js'
 import { commandMapBack, commandMapForward } from './command_map.js';
 import { commandExplore } from './command_explore.js'
+import { commandCatch } from './command_catch.js';
 
 export async function startREPL(state: State) {
     state.readline.prompt();
@@ -63,5 +64,11 @@ export function getCommands(): Record<string, CLICommand> {
       description: "see nearby pokemon at a location",
       callback: commandExplore,
     },
+
+    catch: {
+      name: "catch <pokemon_name>",
+      description: "attempt to catch a pokemon",
+      callback: commandCatch
+    }
   };
 }

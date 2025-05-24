@@ -2,17 +2,6 @@
 > pokedexts@1.0.0 dev
 > npx tsc && node dist/main.js
 
-pokedex > [ 'pastoria-city-area' ]
-Nearby Pokemon:
-tentacool
-tentacruel
-magikarp
-gyarados
-remoraid
-octillery
-wingull
-pelipper
-shellos
-gastrodon
-pokedex > []
-Closing the Pokedex... Goodbye!
+pokedex > Throwing a Pokeball at squirtle...
+squirtle was caught!
+pokedex > Closing the Pokedex... Goodbye!
