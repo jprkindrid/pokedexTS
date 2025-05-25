@@ -17,11 +17,11 @@ export async function commandCatch(state, ...args) {
     catch (err) {
         throw new Error(`Error getting pokemon information: ${err.message}`);
     }
-    const chanceBase = 1 / (pokemonToCatch.base_experience * Math.random());
-    const multiplier = 20;
-    const chance = multiplier * chanceBase;
-    if (chance > .5) {
-        state.pokedex[pokemonName] = pokemonToCatch;
+    const difficultyFactor = pokemonToCatch.base_experience / 300;
+    const randomFactor = 0.5 + (Math.random() * 0.5); // Random multiplier between 0.5-1.0
+    const chance = (1 - difficultyFactor) * randomFactor;
+    if (chance > 0.4) { // Lower threshold for more catches
+        state.pokedex[pokemonToCatch.name.toLowerCase()] = pokemonToCatch;
         console.log(`${pokemonName} was caught!`);
     }
     else {

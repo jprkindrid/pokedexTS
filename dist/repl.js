@@ -4,6 +4,8 @@ import { cleanInput } from './clean_input.js';
 import { commandMapBack, commandMapForward } from './command_map.js';
 import { commandExplore } from './command_explore.js';
 import { commandCatch } from './command_catch.js';
+import { commandInspect } from './command_inspect.js';
+import { commandPokedex } from './command_pokedex.js';
 export async function startREPL(state) {
     state.readline.prompt();
     state.readline.on("line", async (input) => {
@@ -59,6 +61,16 @@ export function getCommands() {
             name: "catch <pokemon_name>",
             description: "attempt to catch a pokemon",
             callback: commandCatch
+        },
+        inspect: {
+            name: "inspect <pokemon_name>",
+            description: "inspect a pokemon you've caught",
+            callback: commandInspect
+        },
+        pokedex: {
+            name: "pokedex",
+            description: "see your caught pokemon",
+            callback: commandPokedex
         }
     };
 }

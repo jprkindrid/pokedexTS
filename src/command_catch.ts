@@ -4,7 +4,7 @@ import { Pokemon } from "./pokemonType.js";
 
 export async function commandCatch(state: State, ...args: string[]) {
     
-        if (args.length === 0) {
+    if (args.length === 0) {
         throw new Error("You must provide a pokemon name")
     }
     const pokemonName: string = args[0]
@@ -23,15 +23,17 @@ export async function commandCatch(state: State, ...args: string[]) {
         throw new Error(`Error getting pokemon information: ${(err as Error).message}`)
     }
 
-    const baseRate = 0.3; 
-    const difficultyFactor = Math.min(pokemonToCatch.base_experience / 300, 1);
-    const chance = baseRate * (1 - difficultyFactor) * (1 + Math.random());
-    if (chance > .5) {
-        state.pokedex[pokemonToCatch.name.toLowerCase()] = pokemonToCatch
-        console.log(`${pokemonName} was caught!`)
+    const difficultyFactor = pokemonToCatch.base_experience / 300
+    const randomFactor = 0.5 + (Math.random() * 0.5); // Random multiplier between 0.5-1.0
+    const chance = (1 - difficultyFactor) * randomFactor;
+
+    if (chance > 0.4) { // Lower threshold for more catches
+        state.pokedex[pokemonToCatch.name.toLowerCase()] = pokemonToCatch;
+        console.log(`${pokemonName} was caught!`);
     } else {
-        console.log(`${pokemonName} escaped!`)
+        console.log(`${pokemonName} escaped!`);
     }
+
 
 
 }
